@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block head %}
+      {% block meta %}
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Meta, title, CSS, favicons, etc. -->
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+      {% endblock meta %}
+
+      <title>DBMS Project | {% block title %}Index{% endblock %}</title>
+
+    {% endblock head %}
+  </head>
+
+  <body class="{% block body_class %}nav-md {% endblock body_class %}">
+    {% block body %}
+        Hello<br>
+
+      <button id="button_select" onclick = select()>Eu Hieu</button>
+        <br>
+        <lable>Statement: </lable>
+        <p id="statement_select"></p>
+        <br>
+        <lable>Time: </lable>
+        <p id="time_select"></p>
+
+        <script>
+            function call(url, callback) {
+                $.ajax({
+                    type: 'POST',
+                    url: url,
+                    success: function(results) {
+                        callback(results);
+                    }
+                });
+            }
+            function select() {
+                call(`/mysql_select`, function(results){
+                    $('#statement_select').text(results[0]);
+                    $('#time_select').text(results[1])
+                    alert("Hello")
+                });
+            }
+        </script>
+        <!-- jQuery -->
+        <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+    {% endblock body %}
+  </body>
+</html>
