@@ -1,14 +1,16 @@
 import mysql.connector
 import subprocess
 
-mydb = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    passwd="123456",
-    database="classicmodels"
-)
-
 mysql_args = ['net', 'start', 'mysql57']
+
+def connect():
+    mydb = mysql.connector.connect(
+        host="localhost",
+        user="root",
+        passwd="12345678",
+        database="sakila"
+    )
+    return mydb
 
 def restart_mysql():
     mysql_args[1] = 'start'
@@ -19,6 +21,8 @@ def restart_mysql():
     subprocess.run(mysql_args)
 
 def mysqlConnect(sql, num):
+    restart_mysql()
+    mydb = connect()
     mycursor = mydb.cursor()
     mycursor.execute("SET PROFILING = 1")
     mycursor.execute(sql)

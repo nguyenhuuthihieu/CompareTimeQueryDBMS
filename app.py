@@ -19,7 +19,7 @@ def hello_world():
 def mysql_select():
     output = []
     q = select_mysql
-    result = mysqlConnect(q, 1)
+    result = mysqlConnect(q, 0)
     output.append(q)
     output.append(result[1])
     return jsonify(output)

@@ -21,11 +21,17 @@
 
       <button id="button_select" onclick = select()>Eu Hieu</button>
         <br>
-        <lable>Statement: </lable>
-        <p id="statement_select"></p>
+        <lable>Mysql Statement: </lable>
+        <p id="my_st_select"></p>
         <br>
-        <lable>Time: </lable>
-        <p id="time_select"></p>
+        <lable>Mysql Time: </lable>
+        <p id="my_ti_select"></p>
+
+        <lable>ArangoDB Statement: </lable>
+        <p id="ar_st_select"></p>
+        <br>
+        <lable>ArangoDB Time: </lable>
+        <p id="ar_ti_select"></p>
 
         <script>
             function call(url, callback) {
@@ -39,9 +45,12 @@
             }
             function select() {
                 call(`/mysql_select`, function(results){
-                    $('#statement_select').text(results[0]);
-                    $('#time_select').text(results[1])
-                    alert("Hello")
+                    $('#my_st_select').text(results[0]);
+                    $('#my_ti_select').text(results[1])
+                });
+                call(`/arangodb_select`, function(results){
+                    $('#ar_st_select').text(results[0]);
+                    $('#ar_ti_select').text(results[1])
                 });
             }
         </script>
