@@ -1,0 +1,18 @@
+#join arango
+FOR u IN user
+LET rent = (
+	FOR fim IN OUTBOUND u user_film
+	RETURN {
+	    film: fim
+	}
+)
+FILTER rent != []
+RETURN {
+	user: u,
+	rental: rent
+}
+#join mysql
+
+SELECT u.*, f.* FROM user
+JOIN user_film uf ON u.id = uf.user_id
+JOIN film f ON f.id = uf.film_id;

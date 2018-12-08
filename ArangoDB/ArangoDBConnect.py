@@ -12,7 +12,7 @@ def restart_arangodb():
     subprocess.run(args)
 
 def arangoDBConnect(aql):
-    restart_arangodb()
+    # restart_arangodb()
     client = ArangoClient()
     db = client.db('_system', username='root', password='')
     cursor = db.aql.execute(

@@ -8,54 +8,213 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/    bootstrap.min.css') }}">
+          <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
       {% endblock meta %}
 
       <title>DBMS Project | {% block title %}Index{% endblock %}</title>
-
     {% endblock head %}
   </head>
 
   <body class="{% block body_class %}nav-md {% endblock body_class %}">
     {% block body %}
-        Hello<br>
 
-      <button id="button_select" onclick = select()>Eu Hieu</button>
-        <br>
-        <lable>Mysql Statement: </lable>
-        <p id="my_st_select"></p>
-        <br>
-        <lable>Mysql Time: </lable>
-        <p id="my_ti_select"></p>
+    <div class="container">
+    <h1 style="text-align: center;
+            color: #0c5460;
+            font-family: 'Times New Roman'"
+    >So sánh thời gian truy vấn của ArangoDB và Mysql (Đơn vị: giây)</h1>
+        <br/><br/>
+     <div class="row">
+        <div class="col-lg-3">
+          <b>Truy vấn</b>
+        </div>
+        <div class="col-lg-3">
+          <b>Thời gian của ArangoDB</b>
+        </div>
+        <div class="col-lg-3">
+          <b>Thời gian của Mysql</b>
+        </div>
+        <div class="col-lg-3">
+        </div>
+      </div>
+{#       <div class="row">#}
+{#        <div class="col-lg-3">#}
+{#        </div>#}
+{#        <div class="col-lg-3">#}
+{#        </div>#}
+{#        <div class="col-lg-3">#}
+{#        </div>#}
+{#        <div class="col-lg-3">#}
+{#            <button type="button" class="btn btn-success" id="button_select" href="/restart_dbms">Restart</button>#}
+{#            <lable id="restart">{{ restart }}</lable>#}
+{#        </div>#}
+{#      </div>#}
 
-        <lable>ArangoDB Statement: </lable>
-        <p id="ar_st_select"></p>
-        <br>
-        <lable>ArangoDB Time: </lable>
-        <p id="ar_ti_select"></p>
+        <hr/>
+      <div class="row">
+        <div class="col-lg-3">
+          Đọc có điều kiện, có index
+        </div>
+        <div class="col-lg-3">
+          <p id="time_select_arangodb"></p>
+        </div>
+        <div class="col-lg-3">
+          <p id="time_select_mysql"></p>
+        </div>
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-success" id="button_select" onclick = select()>So sánh</button>
+        </div>
+      </div>
+    <hr/>
+      <div class="row">
+        <div class="col-lg-3">
+          Đọc có điều kiện, không index
+        </div>
+        <div class="col-lg-3">
+          <p id="time_select2_arangodb"></p>
+        </div>
+        <div class="col-lg-3">
+          <p id="time_select2_mysql"></p>
+        </div>
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-success" id="button_select" onclick = select2()>So sánh</button>
+        </div>
+      </div>
+    <hr/>
+      <div class="row">
+        <div class="col-lg-3">
+          Đọc bản ghi/documents và sắp xếp
+        </div>
+        <div class="col-lg-3">
+          <p id="time_sort_arangodb"></p>
+        </div>
+        <div class="col-lg-3">
+          <p id="time_sort_mysql"></p>
+        </div>
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-success" id="button_select" onclick = sort()>So sánh</button>
+        </div>
+      </div>
+    <hr/>
+      <div class="row">
+        <div class="col-lg-3">
+          Chỉnh sửa bản ghi/documents
+        </div>
+        <div class="col-lg-3">
+          <p id="time_update_arangodb"></p>
+        </div>
+        <div class="col-lg-3">
+          <p id="time_update_mysql"></p>
+        </div>
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-success" id="button_select" onclick = update()>So sánh</button>
+        </div>
+      </div>
+    <hr/>
+      <div class="row">
+        <div class="col-lg-3">
+          Xóa một bản ghi/documnent
+        </div>
+        <div class="col-lg-3">
+          <p id="time_delete_arangodb"></p>
+        </div>
+        <div class="col-lg-3">
+          <p id="time_delete_mysql"></p>
+        </div>
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-success" id="button_select" onclick = dlt()>So sánh</button>
+        </div>
+      </div>
+    <hr/>
+      <div class="row">
+        <div class="col-lg-3">
+          Join nhiều bảng/collections
+        </div>
+        <div class="col-lg-3">
+          <p id="time_join_arangodb"></p>
+        </div>
+        <div class="col-lg-3">
+          <p id="time_join_mysql"></p>
+        </div>
+        <div class="col-lg-3">
+            <button type="button" class="btn btn-success" id="button_select" onclick = join()>So sánh</button>
+        </div>
+      </div>
+    <hr/>
+        <p><b>CHÚ Ý:</b> Hai database được so sánh trên cùng một điều kiện,chúng ta chỉ nên thao tác một so sánh một lúc để đảm bảo service được
+    restart trước mỗi so sánh, điều này tránh được lỗi dữ liệu được load vào buffer trước </p>
+    </div>
 
-        <script>
-            function call(url, callback) {
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    success: function(results) {
-                        callback(results);
-                    }
-                });
-            }
-            function select() {
-                call(`/mysql_select`, function(results){
-                    $('#my_st_select').text(results[0]);
-                    $('#my_ti_select').text(results[1])
-                });
-                call(`/arangodb_select`, function(results){
-                    $('#ar_st_select').text(results[0]);
-                    $('#ar_ti_select').text(results[1])
-                });
-            }
-        </script>
-        <!-- jQuery -->
-        <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+
+    <script>
+        function call(url, callback) {
+            $.ajax({
+                type: 'POST',
+                url: url,
+                success: function(results) {
+                    callback(results);
+                }
+            });
+        }
+        function select() {
+            call(`/mysql_select`, function(results){
+                $('#time_select_mysql').text(results[1])
+            });
+            call(`/arangodb_select`, function(results){
+                $('#time_select_arangodb').text(results[1])
+            });
+        }
+
+        function select2() {
+            call(`/mysql_select2`, function(results){
+                $('#time_select2_mysql').text(results[1])
+            });
+            call(`/arangodb_select2`, function(results){
+                $('#time_select2_arangodb').text(results[1])
+            });
+        }
+
+        function sort() {
+            call(`/mysql_sort`, function(results){
+                $('#time_sort_mysql').text(results[1])
+            });
+            call(`/arangodb_sort`, function(results){
+                $('#time_sort_arangodb').text(results[1])
+            });
+        }
+
+        function update() {
+            call(`/mysql_update`, function(results){
+                $('#time_update_mysql').text(results[1])
+            });
+            call(`/arangodb_update`, function(results){
+                $('#time_update_arangodb').text(results[1])
+            });
+        }
+
+        function dlt() {
+            call(`/mysql_delete`, function(results){
+                $('#time_delete_mysql').text(results[1])
+            });
+            call(`/arangodb_delete`, function(results){
+                $('#time_delete_arangodb').text(results[1])
+            });
+        }
+
+        function join() {
+            call(`/mysql_join`, function(results){
+                $('#time_join_mysql').text(results[1])
+            });
+            call(`/arangodb_join`, function(results){
+                $('#time_join_arangodb').text(results[1])
+            });
+        }
+
+    </script>
+    <!-- jQuery -->
+    <script src="{{ url_for('static', filename='jquery.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/bootstrap.min.js') }}"></script>
     {% endblock body %}
   </body>
 </html>
