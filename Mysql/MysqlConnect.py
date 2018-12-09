@@ -21,7 +21,7 @@ def restart_mysql():
     subprocess.run(mysql_args)
 
 def mysqlConnect(sql, num):
-    # restart_mysql()
+    restart_mysql()
     mydb = connect()
     mycursor = mydb.cursor()
     mycursor.execute("SET PROFILING = 1")
