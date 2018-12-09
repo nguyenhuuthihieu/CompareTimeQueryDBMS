@@ -1,0 +1,30 @@
+arangoimp --file "" --type csv --collection user_film --server.username root --batch-size 1000000
+
+LOAD DATA INFILE 'Z:\misc/dbms00/mys_u_1_000_000.csv' IGNORE
+INTO TABLE user
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+LOAD DATA INFILE 'Z:\misc/dbms00/mys_f_1_000_000.csv' IGNORE
+INTO TABLE film
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+
+SET FOREIGN_KEY_CHECKS=0;
+LOAD DATA INFILE 'Z:\misc/dbms00/mys_u_f_1_000_000.csv'
+INTO TABLE user_film
+FIELDS TERMINATED BY ','
+ENCLOSED BY '"'
+LINES TERMINATED BY '\n'
+IGNORE 1 ROWS;
+SET FOREIGN_KEY_CHECKS=1;
+
+#
+DELETE FROM user_film;
+DELETE FROM user;
+DELETE FROM film;
+#1.000.000: 632.25mys, 2396ara => 742.82mys, 10933ara

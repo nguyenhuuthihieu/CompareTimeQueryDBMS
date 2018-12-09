@@ -16,3 +16,10 @@ RETURN {
 SELECT u.*, f.* FROM user
 JOIN user_film uf ON u.id = uf.user_id
 JOIN film f ON f.id = uf.film_id;
+
+#select arango
+FOR fi IN film
+    FILTER fi._key == '50000'
+    RETURN fi
+
+#update rango

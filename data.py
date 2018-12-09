@@ -19,39 +19,44 @@ select2_arangodb = """
 """
 
 sort_mysql = """
-    SELECT * FROM film WHERE id = 50000
+SELECT * FROM user
+ORDER BY name LIMIT 5;
 """
 
 sort_arangodb = """
-    FOR fi IN film
-    FILTER fi._key == '50000'
-    RETURN fi
+FOR user IN user
+    SORT user.name
+LIMIT 0, 5
+RETURN user
 """
 
 update_mysql = """
-    SELECT * FROM film WHERE id = 50000
+UPDATE user
+SET name = "John Smith"
+WHERE id = 1;
 """
 
 update_arangodb = """
-    FOR fi IN film
-    FILTER fi._key == '50000'
-    RETURN fi
+UPDATE { _key: "1" }
+WITH { name: "John Smith" }
+IN user
 """
 
 delete_mysql = """
-    SELECT * FROM film WHERE id = 50000
+DELETE FROM user
+    WHERE id = 1;
 """
 
 delete_arangodb = """
-    FOR fi IN film
-    FILTER fi._key == '50000'
-    RETURN fi
+REMOVE { _key:"1" }
+    IN user
 """
 
 join_mysql = """
 SELECT u.*, f.* FROM user u
 JOIN user_film uf ON u.id = uf.user_id
-JOIN film f ON f.id = uf.film_id;
+JOIN film f ON f.id = uf.film_id
+WHERE u.id = 500000;
 """
 
 join_arangodb = """
@@ -62,7 +67,7 @@ RETURN {
     film: fim
 }
 )
-FILTER rent != []
+FILTER rent != [] AND u._key == '500000'
 RETURN {
 user: u,
 rental: rent
